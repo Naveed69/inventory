@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -11,17 +10,17 @@ import {
   Typography,
   Grid,
   IconButton,
-  Tooltip
-} from '@mui/material';
-import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
-import ConfirmationDialog from './ConfirmationDialog';
-import BarcodeScannerDialog from './BarcodeScannerDialog';
-import '../pages/Dashboard.css';
+  Tooltip,
+} from "@mui/material";
+import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
+import ConfirmationDialog from "./ConfirmationDialog";
+import BarcodeScannerDialog from "./BarcodeScannerDialog";
+import "../pages/Dashboard.css";
 
 const AddProduct = ({ allProducts, setAllProducts }) => {
-  const [productName, setProductName] = useState('');
-  const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('Saree');
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("Saree");
   const [quantity, setQuantity] = useState(1);
   const [open, setOpen] = useState(false);
   const [existingProduct, setExistingProduct] = useState(null);
@@ -36,7 +35,9 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
       return;
     }
 
-    const productExists = allProducts.find(p => p.name.toLowerCase() === productName.toLowerCase());
+    const productExists = allProducts.find(
+      (p) => p.name.toLowerCase() === productName.toLowerCase()
+    );
 
     if (productExists) {
       setExistingProduct(productExists);
@@ -60,9 +61,13 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
   };
 
   const handleUpdateProduct = () => {
-    const updatedProducts = allProducts.map(p =>
+    const updatedProducts = allProducts.map((p) =>
       p.id === existingProduct.id
-        ? { ...p, quantity: p.quantity + parseInt(quantity), price: parseFloat(price) }
+        ? {
+            ...p,
+            quantity: p.quantity + parseInt(quantity),
+            price: parseFloat(price),
+          }
         : p
     );
     setAllProducts(updatedProducts);
@@ -76,26 +81,26 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
   };
 
   const resetForm = () => {
-    setProductName('');
-    setPrice('');
-    setCategory('Saree');
+    setProductName("");
+    setPrice("");
+    setCategory("Saree");
     setQuantity(1);
   };
 
   const handleScan = (barcodeData) => {
-    const parts = barcodeData.split('-');
+    const parts = barcodeData.split("-");
     if (parts.length === 3) {
-        setProductName(parts[0]);
-        setPrice(parts[1]);
-        setCategory(parts[2]);
+      setProductName(parts[0]);
+      setPrice(parts[1]);
+      setCategory(parts[2]);
     } else {
-        alert("Invalid barcode format. Expected: ProductName-Price-Category");
+      alert("Invalid barcode format. Expected: ProductName-Price-Category");
     }
   };
 
   return (
     <div className="add-product-container">
-      <Paper elevation={3} sx={{ p: 4, mt: 4, borderRadius: '12px' }}>
+      <Paper elevation={3} sx={{ p: 4, mt: 4, borderRadius: "12px" }}>
         <Typography variant="h4" gutterBottom align="center">
           Add New Product
         </Typography>
@@ -137,6 +142,7 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
                 <Select
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
+                  label="Category"
                 >
                   {categories.map((cat) => (
                     <MenuItem key={cat} value={cat}>
@@ -146,13 +152,21 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={12} align="center" sx={{ display: 'flex', justifyContent: 'center', gap: 2}}>
+            <Grid
+              item
+              xs={12}
+              align="center"
+              sx={{ display: "flex", justifyContent: "center", gap: 2 }}
+            >
               <Button type="submit" variant="contained">
                 Add Product
               </Button>
               <Tooltip title="Scan Barcode">
-                <IconButton onClick={() => setBarcodeDialogOpen(true)} color="primary">
-                    <QrCodeScannerIcon />
+                <IconButton
+                  onClick={() => setBarcodeDialogOpen(true)}
+                  color="primary"
+                >
+                  <QrCodeScannerIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -166,11 +180,11 @@ const AddProduct = ({ allProducts, setAllProducts }) => {
         title="Product Exists"
         message={`Product "${productName}" already exists. Do you want to update the quantity and price?`}
       />
-        <BarcodeScannerDialog
-            open={barcodeDialogOpen}
-            onClose={() => setBarcodeDialogOpen(false)}
-            onScan={handleScan}
-        />
+      <BarcodeScannerDialog
+        open={barcodeDialogOpen}
+        onClose={() => setBarcodeDialogOpen(false)}
+        onScan={handleScan}
+      />
     </div>
   );
 };
